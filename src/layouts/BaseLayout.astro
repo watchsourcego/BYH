@@ -1,15 +1,20 @@
 ---
 import "../styles/global.css";
 import { brand } from "../../brand.config";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteBottomNav from "../components/SiteBottomNav.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  /** Show grain texture overlay */
+  grain?: boolean;
 }
 
 const {
   title = brand.name,
   description = brand.tagline,
+  grain = true,
 } = Astro.props;
 ---
 
@@ -19,11 +24,11 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <title>{title}</title>
+    <title>{title === brand.name ? brand.name : `${title} · ${brand.name}`}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Syne:wght@700;800&display=swap"
       rel="stylesheet"
     />
     <style
@@ -45,12 +50,15 @@ const {
         --color-text: var(--colorText);
         --color-text-muted: var(--colorTextMuted);
         --color-on-primary: var(--colorOnPrimary);
+        --color-accent-secondary: #00d4ff;
         --font-display: var(--fontDisplay);
         --font-body: var(--fontBody);
       }
     </style>
   </head>
-  <body>
+  <body class:list={[{ grain }]}>
+    <SiteHeader />
     <slot />
+    <SiteBottomNav />
   </body>
 </html>

@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { brand } from "../../brand.config";
+---
+
+<BaseLayout title="About" description={`About ${brand.name} — ${brand.tagline}`}>
+  <div class="page-shell">
+    <div class="page-shell__inner">
+      <h1>About</h1>
+      <p>
+        {brand.name} designs and manufactures children's watches with bold colors,
+        durable materials, and playful details — built for kids who move fast and
+        dream big.
+      </p>
+      <p>
+        From our factory floor to your wrist, every piece is made with the same
+        energy we put into play: precise, reliable, and full of life.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

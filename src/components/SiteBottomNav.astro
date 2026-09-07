@@ -1,0 +1,181 @@
+---
+type NavIcon = "home" | "shop" | "about" | "contact" | "policies";
+
+type MobileNavItem = {
+  label: string;
+  href: string;
+  icon: NavIcon;
+};
+
+const mobileNavItems: MobileNavItem[] = [
+  { label: "HOME", href: "/", icon: "home" },
+  { label: "SHOP", href: "/shop", icon: "shop" },
+  { label: "ABOUT", href: "/about", icon: "about" },
+  { label: "CONTACT", href: "/contact", icon: "contact" },
+  { label: "POLICIES", href: "/policies", icon: "policies" },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+function isActive(href: string) {
+  const normalized = href.replace(/\/$/, "") || "/";
+  if (normalized === "/") return currentPath === "/";
+  return currentPath === normalized || currentPath.startsWith(`${normalized}/`);
+}
+---
+
+<nav class="site-bottom-nav" aria-label="Mobile">
+  <div class="glass-pill site-bottom-nav__pill">
+    <div class="site-bottom-nav__items">
+      {mobileNavItems.map((item) => (
+        <a
+          class:list={["site-bottom-nav__link", { "is-active": isActive(item.href) }]}
+          href={item.href}
+          aria-current={isActive(item.href) ? "page" : undefined}
+        >
+          <span class="site-bottom-nav__icon" aria-hidden="true">
+            {item.icon === "home" && (
+              <svg width="16" height="16" viewBox="0 0 18 18">
+                <path
+                  d="M3 7.5 9 2.5l6 5V15a1 1 0 0 1-1 1h-3.5v-4H7.5v4H4a1 1 0 0 1-1-1V7.5Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            )}
+            {item.icon === "shop" && (
+              <svg width="16" height="16" viewBox="0 0 18 18">
+                <path
+                  d="M3.5 4.5h11l-1 9H4.5l-1-9ZM6.5 4.5V3.5a2.5 2.5 0 0 1 5 0v1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            )}
+            {item.icon === "about" && (
+              <svg width="16" height="16" viewBox="0 0 18 18">
+                <circle cx="9" cy="9" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <path d="M9 8v4M9 6h.01" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            )}
+            {item.icon === "contact" && (
+              <svg width="16" height="16" viewBox="0 0 18 18">
+                <path
+                  d="M3.5 5.5h11v7H3.5v-7ZM3.5 6.5 9 10l5.5-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            )}
+            {item.icon === "policies" && (
+              <svg width="16" height="16" viewBox="0 0 18 18">
+                <path
+                  d="M5.5 2.5h5l3 3v10H5.5v-13ZM8.5 2.5v3.5h3M7 10h4M7 12.5h4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            )}
+          </span>
+          <span class="site-bottom-nav__label">{item.label}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<style>
+  .site-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding:
+      0 clamp(0.75rem, 3vw, 2rem)
+      max(1.25rem, env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+  }
+
+  .site-bottom-nav__pill {
+    pointer-events: auto;
+    width: 100%;
+    padding: 0.5rem 0.375rem;
+    border-radius: 999px;
+  }
+
+  .site-bottom-nav__items {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0.125rem;
+    width: 100%;
+  }
+
+  .site-bottom-nav__link {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: 0.35rem 0.125rem;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--color-on-primary);
+    opacity: 0.88;
+    transition:
+      opacity 160ms ease,
+      background 160ms ease;
+  }
+
+  .site-bottom-nav__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  .site-bottom-nav__label {
+    max-width: 100%;
+    font-size: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-bottom-nav__link:hover,
+  .site-bottom-nav__link:active {
+    opacity: 1;
+  }
+
+  .site-bottom-nav__link.is-active {
+    opacity: 1;
+    background: rgb(255 255 255 / 0.16);
+  }
+
+  @media (max-width: 900px) {
+    .site-bottom-nav {
+      display: block;
+    }
+  }
+</style>

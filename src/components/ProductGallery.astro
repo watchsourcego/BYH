@@ -1,0 +1,257 @@
+---
+import { homeProducts, galleryHeightVh } from "../data/products";
+import { brandAsset } from "../../brand.config";
+---
+
+<section class="gallery" aria-label="Featured watches" style={`--gallery-height: ${galleryHeightVh}vh`}>
+  <div class="gallery__bg" aria-hidden="true"></div>
+
+  <!-- Desktop -->
+  <div class="gallery__desktop">
+    {homeProducts.map((product) => (
+      <a
+        class="gallery__item gallery__item--desktop"
+        href={product.href}
+        style={`
+          top: ${product.style.top ?? "auto"};
+          left: ${product.style.left ?? "auto"};
+          right: ${product.style.right ?? "auto"};
+          bottom: ${product.style.bottom ?? "auto"};
+          width: ${product.style.width};
+          --rotate: ${product.style.rotate ?? "0deg"};
+          z-index: ${product.style.zIndex ?? 1};
+        `}
+        aria-label={product.name}
+      >
+        <img
+          class="gallery__image"
+          src={brandAsset(product.image)}
+          alt={product.imageAlt}
+          width="400"
+          height="400"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="gallery__label">{product.name}</span>
+      </a>
+    ))}
+  </div>
+
+  <!-- Mobile: one product per slide, scroll to next -->
+  <div class="gallery__scroller" id="gallery-scroller">
+    {homeProducts.map((product) => (
+      <div class="gallery__slide">
+        <a class="gallery__item gallery__item--mobile" href={product.href} aria-label={product.name}>
+          <img
+            class="gallery__image"
+            src={brandAsset(product.image)}
+            alt={product.imageAlt}
+            width="400"
+            height="400"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  function initMobileCarousel() {
+    const scroller = document.getElementById("gallery-scroller");
+    if (!scroller) return;
+
+    const mq = window.matchMedia("(max-width: 768px)");
+    const slides = scroller.querySelectorAll<HTMLElement>(".gallery__slide");
+    let raf = 0;
+
+    function resetSlides() {
+      slides.forEach((slide) => {
+        const item = slide.querySelector<HTMLElement>(".gallery__item--mobile");
+        if (!item) return;
+        item.style.transform = "";
+        item.style.filter = "";
+        item.style.opacity = "";
+      });
+    }
+
+    function updateSlides() {
+      if (!mq.matches) {
+        resetSlides();
+        return;
+      }
+
+      const viewRect = scroller.getBoundingClientRect();
+      const viewCenter = viewRect.top + viewRect.height / 2;
+      const viewH = viewRect.height;
+
+      slides.forEach((slide) => {
+        const item = slide.querySelector<HTMLElement>(".gallery__item--mobile");
+        if (!item) return;
+
+        const rect = slide.getBoundingClientRect();
+        const slideCenter = rect.top + rect.height / 2;
+        const offset = (slideCenter - viewCenter) / viewH;
+        const abs = Math.min(Math.abs(offset), 1);
+
+        const scale = Math.max(0.5, 1 - abs * 0.48);
+        const blur = abs * 9;
+        const opacity = Math.max(0.35, 1 - abs * 0.6);
+        const rotateX = offset * 40;
+
+        item.style.transform = `perspective(900px) rotateX(${rotateX}deg) scale(${scale})`;
+        item.style.filter = `drop-shadow(0 12px 24px rgb(0 0 0 / ${0.15 + (1 - abs) * 0.2})) blur(${blur}px)`;
+        item.style.opacity = String(opacity);
+      });
+    }
+
+    function onScroll() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(updateSlides);
+    }
+
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    mq.addEventListener("change", updateSlides);
+    window.addEventListener("resize", updateSlides);
+    updateSlides();
+  }
+
+  initMobileCarousel();
+  document.addEventListener("astro:page-load", initMobileCarousel);
+</script>
+
+<style>
+  .gallery {
+    position: relative;
+    min-height: var(--gallery-height, 430vh);
+  }
+
+  .gallery__bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      180deg,
+      #ff6b9d 0%,
+      #ff8a5c 12%,
+      #c44dff 35%,
+      #4dabf7 58%,
+      #1a3a5c 78%,
+      #0a1628 100%
+    );
+  }
+
+  .gallery__scroller {
+    display: none;
+  }
+
+  .gallery__desktop {
+    position: relative;
+    z-index: 1;
+    min-height: var(--gallery-height, 430vh);
+    padding-bottom: 10vh;
+  }
+
+  .gallery__item {
+    display: block;
+    text-decoration: none;
+  }
+
+  .gallery__item--desktop {
+    position: absolute;
+    transform: rotate(var(--rotate));
+    transition:
+      transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      filter 240ms ease;
+    filter: drop-shadow(0 12px 28px rgb(0 0 0 / 0.28));
+  }
+
+  .gallery__item--desktop:hover {
+    transform: rotate(var(--rotate)) scale(1.06) translateY(-6px);
+    filter: drop-shadow(0 20px 40px rgb(0 0 0 / 0.35));
+    z-index: 20 !important;
+  }
+
+  .gallery__image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .gallery__label {
+    position: absolute;
+    bottom: -1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0);
+    white-space: nowrap;
+    transition: color 200ms ease;
+  }
+
+  .gallery__item--desktop:hover .gallery__label {
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  /* Mobile: one product per snap slide */
+  @media (max-width: 768px) {
+    :global(body) {
+      overflow: hidden;
+      height: 100dvh;
+    }
+
+    .gallery {
+      min-height: 100dvh;
+      height: 100dvh;
+    }
+
+    .gallery__desktop {
+      display: none;
+    }
+
+    .gallery__scroller {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      --slide-h: 68dvh;
+      --peek: calc((100dvh - var(--slide-h)) / 2);
+      padding: var(--peek) 0;
+    }
+
+    .gallery__slide {
+      height: var(--slide-h);
+      min-height: var(--slide-h);
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1.25rem;
+      box-sizing: border-box;
+    }
+
+    .gallery__item--mobile {
+      width: min(80vw, 360px);
+      will-change: transform, filter, opacity;
+    }
+
+    .gallery__item--mobile .gallery__image {
+      width: 100%;
+      height: auto;
+      max-height: 58dvh;
+      object-fit: contain;
+    }
+  }
+</style>

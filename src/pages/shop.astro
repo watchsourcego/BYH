@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { brand } from "../../brand.config";
+import { shopProducts } from "../data/products";
+import { brandAsset } from "../../brand.config";
+---
+
+<BaseLayout title="Shop" description={`Shop ${brand.name} kids watches`}>
+  <div class="page-shell">
+    <div class="page-shell__inner shop">
+      <h1>Shop</h1>
+      <p>Explore our full collection of youth watches.</p>
+      <ul class="shop-grid">
+        {shopProducts.map((product) => (
+          <li>
+            <a class="shop-card" href={product.href}>
+              <img
+                src={brandAsset(product.image)}
+                alt={product.imageAlt}
+                width="200"
+                height="200"
+                loading="lazy"
+              />
+              <span>{product.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-shell__inner.shop {
+    width: min(72rem, 100%);
+  }
+
+  .shop-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .shop-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 1.5rem 1.25rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    background: rgb(255 255 255 / 0.08);
+    border: 1px solid rgb(255 255 255 / 0.15);
+    transition: transform 200ms ease, background 200ms ease;
+  }
+
+  .shop-card:hover {
+    transform: translateY(-4px);
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  .shop-card span {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .shop-card img {
+    width: 100%;
+    max-width: 180px;
+    filter: drop-shadow(0 8px 16px rgb(0 0 0 / 0.2));
+  }
+
+  @media (max-width: 900px) {
+    .shop-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .shop-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
