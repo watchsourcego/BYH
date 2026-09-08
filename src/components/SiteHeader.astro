@@ -1,5 +1,4 @@
 ---
-import { brand } from "../../brand.config";
 import { mainNav, policyNav } from "../data/navigation";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -14,10 +13,6 @@ const policiesActive = isActive("/policies");
 ---
 
 <header class="site-header">
-  <a class="glass-pill site-header__logo" href="/" aria-label={`${brand.name} home`}>
-    <span class="site-header__logo-text">{brand.name}</span>
-  </a>
-
   <nav class="glass-pill site-header__nav" aria-label="Primary">
     {mainNav.map((item) => (
       <a
@@ -76,8 +71,7 @@ const policiesActive = isActive("/policies");
     z-index: 100;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: center;
     padding: 1rem clamp(1rem, 3vw, 2rem);
     pointer-events: none;
   }
@@ -86,24 +80,7 @@ const policiesActive = isActive("/policies");
     pointer-events: auto;
   }
 
-  .site-header__logo {
-    text-decoration: none;
-    padding-inline: 1.5rem;
-  }
-
-  .site-header__logo-text {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-on-primary);
-  }
-
   .site-header__nav {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     gap: clamp(0.75rem, 2vw, 1.5rem);
     padding-inline: clamp(1rem, 3vw, 2rem);
   }

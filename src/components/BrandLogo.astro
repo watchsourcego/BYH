@@ -1,0 +1,23 @@
+---
+import { brand, brandAsset } from "../../brand.config";
+
+type LogoVariant = keyof typeof brand.logos;
+
+interface Props {
+  variant?: LogoVariant;
+  class?: string;
+  width?: number;
+  height?: number;
+}
+
+const { variant = "light", class: className, width = 80, height = 32 } = Astro.props;
+---
+
+<img
+  class:list={["brand-logo", className]}
+  src={brandAsset(brand.logos[variant])}
+  alt={`${brand.name} logo`}
+  width={width}
+  height={height}
+  decoding="async"
+/>
