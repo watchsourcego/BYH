@@ -156,7 +156,7 @@ import HomeIntro from "./HomeIntro.astro";
 
   .gallery__desktop {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     min-height: var(--gallery-height, 430vh);
     padding-bottom: 10vh;
   }
@@ -211,7 +211,7 @@ import HomeIntro from "./HomeIntro.astro";
     left: 50%;
     top: clamp(5.5rem, 22vh, 9rem);
     transform: translateX(-50%);
-    z-index: 2;
+    z-index: 3;
     width: min(36rem, 90vw);
     pointer-events: none;
   }
@@ -245,7 +245,7 @@ import HomeIntro from "./HomeIntro.astro";
       display: block;
       position: fixed;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       overflow-y: auto;
       overflow-x: hidden;
       scroll-snap-type: y mandatory;
