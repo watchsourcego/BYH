@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProductDetailView from "../../components/ProductDetailView.astro";
+import { getAllProductDetails, getProductDetail } from "../../data/productDetails";
+
+export function getStaticPaths() {
+  return getAllProductDetails().map((product) => ({
+    params: { slug: product.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const product = getProductDetail(slug!);
+
+if (!product) {
+  return Astro.redirect("/404");
+}
+---
+
+<BaseLayout
+  title={product.title}
+  description={product.description}
+  grain={true}
+>
+  <main>
+    <ProductDetailView product={product} />
+  </main>
+</BaseLayout>

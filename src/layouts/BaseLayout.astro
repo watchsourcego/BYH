@@ -7,15 +7,49 @@ import SiteBottomNav from "../components/SiteBottomNav.astro";
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
   /** Show grain texture overlay */
   grain?: boolean;
 }
 
 const {
   title = brand.name,
-  description = brand.tagline,
+  description = brand.seo.description,
+  ogImage = brand.seo.ogImage,
   grain = true,
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const pageTitle = title === brand.name ? brand.name : `${title} · ${brand.name}`;
+const ogImageURL = new URL(ogImage, Astro.site);
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${brand.siteUrl}/#organization`,
+  name: brand.legalName,
+  alternateName: brand.name,
+  url: brand.siteUrl,
+  logo: new URL(brand.seo.ogImage, Astro.site).href,
+  email: brand.supportEmail,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: brand.address.line1,
+    addressLocality: brand.address.city,
+    addressRegion: brand.address.region,
+    addressCountry: brand.address.country,
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${brand.siteUrl}/#website`,
+  name: brand.name,
+  url: brand.siteUrl,
+  description: brand.seo.description,
+  publisher: { "@id": `${brand.siteUrl}/#organization` },
+};
 ---
 
 <!doctype html>
@@ -24,7 +58,28 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <title>{title === brand.name ? brand.name : `${title} · ${brand.name}`}</title>
+    <link rel="canonical" href={canonicalURL} />
+    <title>{pageTitle}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:site_name" content={brand.name} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <link rel="icon" type="image/webp" href={brand.seo.ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

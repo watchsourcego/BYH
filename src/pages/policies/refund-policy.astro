@@ -1,20 +1,155 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PolicyContact from "../../components/PolicyContact.astro";
+import { brand } from "../../../brand.config";
 ---
 
 <BaseLayout title="Refund Policy">
   <div class="page-shell">
     <div class="page-shell__inner">
       <h1>Refund Policy</h1>
-      <p><em>Last updated: September 2026</em></p>
       <p>
-        We accept returns within 30 days of delivery for unused items in original
-        packaging. To initiate a return, contact us with your order number.
+        {brand.name} is a children's watch manufacturer supplying B2B wholesale,
+        ready-stock, and custom OEM/ODM orders. Policies differ by order type —
+        please review your order details carefully before confirming payment.
       </p>
+
+      <div class="policy-note">
+        <strong>Important</strong>
+        <ul>
+          <li>
+            OEM/ODM orders: once watch production has started, refunds are not
+            available.
+          </li>
+          <li>
+            Ready-stock orders: once goods have been shipped, returns and refunds
+            are not available.
+          </li>
+        </ul>
+        We do not offer unconditional returns. Please consider your order carefully
+        before checkout.
+      </div>
+
+      <hr />
+
+      <h2>OEM/ODM (custom) orders</h2>
       <p>
-        Refunds are processed to the original payment method within 5–10 business
-        days after we receive and inspect the returned item. Shipping costs are
-        non-refundable unless the return is due to our error.
+        Custom children's watches are produced or branded to your specifications —
+        model, dial, strap, packaging, logo, or other requirements. These items are
+        made specifically for you and cannot be resold as standard stock. Once
+        production has started, the order cannot be cancelled and refunds are not
+        available, even if goods have not yet shipped.
+      </p>
+
+      <h2>Ready-stock (in-stock) orders</h2>
+      <p>
+        Ready-stock watches are standard models shipped from existing inventory. For
+        these orders, returns and refunds are not available once goods have been
+        dispatched. Please confirm model numbers, quantities, and shipping details
+        before we ship.
+      </p>
+
+      <h2>Before you place an order</h2>
+      <p>To avoid misunderstandings, we recommend that you:</p>
+      <ul>
+        <li>
+          Confirm model numbers, quantities, colors, and customization details in
+          writing before production or shipment.
+        </li>
+        <li>Review samples or reference images when available.</li>
+        <li>
+          Ask questions about MOQ, lead time, packaging, and shipping before payment.
+        </li>
+        <li>
+          Ensure your shipping address and import requirements are correct.
+        </li>
+      </ul>
+      <p>
+        For OEM/ODM orders, terms are final once production begins. For ready-stock
+        orders, terms are final once goods are shipped — except for verified
+        factory-quality issues described below.
+      </p>
+
+      <h2>Damages and quality issues</h2>
+      <p>
+        Please inspect your shipment as soon as it arrives. If you believe items
+        have a confirmed factory defect — such as the wrong model, a major
+        functional fault not caused in transit, or significant damage attributable
+        to our packing — contact us immediately with photos, video, and your order
+        reference. Claims must be submitted within 7 days of delivery.
+      </p>
+
+      <h2>How to report an issue</h2>
+      <p>
+        Contact our team by email or WhatsApp with your order number, a clear
+        description of the issue, and supporting photos or video. Do not return goods without our
+        prior written approval and return instructions. Unauthorized returns may be
+        refused.
+      </p>
+
+      <h2>Exceptions / non-returnable cases</h2>
+      <p>The following are generally not eligible for return or refund:</p>
+      <ul>
+        <li>OEM/ODM orders once production has started.</li>
+        <li>Ready-stock orders once goods have been shipped.</li>
+        <li>
+          Change of mind, buyer's remorse, or orders placed with incorrect
+          specifications confirmed by the buyer.
+        </li>
+        <li>
+          Cosmetic variations within normal factory tolerance agreed before
+          production.
+        </li>
+        <li>
+          Damage after delivery, improper storage, handling, or modification by the
+          buyer or end customer.
+        </li>
+      </ul>
+      <p>Final terms for your order are confirmed before production or dispatch.</p>
+
+      <h2>Cancellations</h2>
+      <p>
+        If you need to cancel or change an order, contact us as early as possible.
+        For OEM/ODM orders, cancellations may be considered only before production
+        starts and are subject to any costs already incurred (materials, tooling,
+        labor, or deposits). For ready-stock orders, cancellations may be
+        considered only before shipment. Once production has started or goods have
+        been shipped, cancellation and return are not available.
+      </p>
+
+      <h2>Resolution for approved claims</h2>
+      <p>
+        If we verify a qualifying factory defect, we may offer replacement units,
+        repair where practical, or credit against a future order. Partial refunds
+        may apply only when agreed in writing. We do not provide retail-style
+        refunds for bulk wholesale orders except in exceptional cases confirmed by
+        both parties.
+      </p>
+
+      <h2>Refunds</h2>
+      <p>
+        When a refund is approved, we will notify you and process it to your
+        original payment method where applicable. Processing typically takes up to
+        10 business days after approval, plus any additional time required by your
+        bank or payment provider. If more than 15 business days have passed since
+        approval, please contact us.
+      </p>
+
+      <h2>European Union customers</h2>
+      <p>
+        Where applicable law provides a statutory withdrawal period, please note
+        that custom-made or personalized goods produced to your specifications are
+        typically exempt from unconditional return rights. By confirming a custom or
+        wholesale order, you acknowledge that production follows your approved
+        specifications and that refunds are not available once production starts
+        (OEM/ODM) or once goods are shipped (ready-stock), except for verified
+        factory defects.
+      </p>
+
+      <PolicyContact />
+
+      <p class="policy-related">
+        Related: <a href="/policies/shipping-tax">Shipping &amp; tax</a>
       </p>
     </div>
   </div>

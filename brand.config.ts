@@ -4,9 +4,28 @@
  */
 export const brand = {
   name: "BYH",
+  legalName: "BYH Electronic Watch Co., Ltd.",
   tagline: "Youthful watches built for every adventure.",
   siteUrl: "https://byhtimepiece.com",
+  seo: {
+    description:
+      "BYH — Manufacturer of kids LED touch-screen digital watches. Wholesale & OEM from Dongguan, China.",
+    homeIntro:
+      "Kids LED touch-screen digital watches built for every adventure. Explore our full collection or learn about our factory in Dongguan.",
+    ogImage: "/logo/BYH-logo.webp",
+  },
   supportEmail: "support@byhtimepiece.com",
+  whatsapp: "+86 180 2429 0526",
+  whatsappUrl: "https://wa.me/8618024290526",
+  address: {
+    line1: "No. 8, Jinshagang 6th Road",
+    city: "Dongguan",
+    region: "Guangdong",
+    country: "China",
+    full: "No. 8, Jinshagang 6th Road, Dongguan, China",
+    lat: 22.9531,
+    lng: 113.7179,
+  },
 
   colors: {
     primary: "#0a1628",

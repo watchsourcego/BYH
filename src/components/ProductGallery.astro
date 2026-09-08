@@ -1,10 +1,15 @@
 ---
 import { homeProducts, galleryHeightVh } from "../data/products";
 import { brandAsset } from "../../brand.config";
+import HomeIntro from "./HomeIntro.astro";
 ---
 
 <section class="gallery" aria-label="Featured watches" style={`--gallery-height: ${galleryHeightVh}vh`}>
   <div class="gallery__bg" aria-hidden="true"></div>
+
+  <div class="gallery__intro gallery__intro--desktop" aria-labelledby="home-heading-desktop">
+    <HomeIntro headingTag="p" headingId="home-heading-desktop" />
+  </div>
 
   <!-- Desktop -->
   <div class="gallery__desktop">
@@ -37,10 +42,13 @@ import { brandAsset } from "../../brand.config";
     ))}
   </div>
 
-  <!-- Mobile: one product per slide, scroll to next -->
+  <!-- Mobile: intro hero, then one product per slide -->
   <div class="gallery__scroller" id="gallery-scroller">
+    <div class="gallery__slide gallery__slide--intro">
+      <HomeIntro headingTag="h1" />
+    </div>
     {homeProducts.map((product) => (
-      <div class="gallery__slide">
+      <div class="gallery__slide gallery__slide--product">
         <a class="gallery__item gallery__item--mobile" href={product.href} aria-label={product.name}>
           <img
             class="gallery__image"
@@ -63,11 +71,11 @@ import { brandAsset } from "../../brand.config";
     if (!scroller) return;
 
     const mq = window.matchMedia("(max-width: 768px)");
-    const slides = scroller.querySelectorAll<HTMLElement>(".gallery__slide");
+    const productSlides = scroller.querySelectorAll<HTMLElement>(".gallery__slide--product");
     let raf = 0;
 
     function resetSlides() {
-      slides.forEach((slide) => {
+      productSlides.forEach((slide) => {
         const item = slide.querySelector<HTMLElement>(".gallery__item--mobile");
         if (!item) return;
         item.style.transform = "";
@@ -86,7 +94,7 @@ import { brandAsset } from "../../brand.config";
       const viewCenter = viewRect.top + viewRect.height / 2;
       const viewH = viewRect.height;
 
-      slides.forEach((slide) => {
+      productSlides.forEach((slide) => {
         const item = slide.querySelector<HTMLElement>(".gallery__item--mobile");
         if (!item) return;
 
@@ -198,11 +206,30 @@ import { brandAsset } from "../../brand.config";
     color: rgb(255 255 255 / 0.85);
   }
 
-  /* Mobile: one product per snap slide */
+  .gallery__intro {
+    position: absolute;
+    left: 50%;
+    top: clamp(5.5rem, 22vh, 9rem);
+    transform: translateX(-50%);
+    z-index: 2;
+    width: min(36rem, 90vw);
+    pointer-events: none;
+  }
+
+  .gallery__intro :global(a) {
+    pointer-events: auto;
+  }
+
+  /* Mobile: intro hero first, then product carousel */
   @media (max-width: 768px) {
+    .gallery__intro--desktop {
+      display: none;
+    }
+
     :global(body) {
       overflow: hidden;
       height: 100dvh;
+      padding-bottom: 0;
     }
 
     .gallery {
@@ -225,25 +252,43 @@ import { brandAsset } from "../../brand.config";
       scroll-behavior: smooth;
       overscroll-behavior-y: contain;
       -webkit-overflow-scrolling: touch;
-      --slide-h: 68dvh;
-      --peek: calc((100dvh - var(--slide-h)) / 2);
-      padding: var(--peek) 0;
+      padding-bottom: calc(
+        var(--site-bottom-nav-offset, 5.5rem) + env(safe-area-inset-bottom, 0px)
+      );
     }
 
-    .gallery__slide {
-      height: var(--slide-h);
-      min-height: var(--slide-h);
+    .gallery__slide--intro {
+      min-height: 100dvh;
+      height: 100dvh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding:
+        calc(4.5rem + env(safe-area-inset-top, 0px))
+        1.25rem
+        calc(var(--site-bottom-nav-offset, 5.5rem) + 1.5rem);
+      box-sizing: border-box;
+    }
+
+    .gallery__slide--product {
+      min-height: 100dvh;
+      height: 100dvh;
       scroll-snap-align: center;
       scroll-snap-stop: always;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 1.25rem;
+      padding:
+        calc(4rem + env(safe-area-inset-top, 0px))
+        1.25rem
+        calc(var(--site-bottom-nav-offset, 5.5rem) + 1.5rem);
       box-sizing: border-box;
     }
 
     .gallery__item--mobile {
-      width: min(80vw, 360px);
+      width: min(78vw, 340px);
       will-change: transform, filter, opacity;
     }
 

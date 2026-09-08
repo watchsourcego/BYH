@@ -8,6 +8,18 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  --site-bottom-nav-offset: 5.5rem;
+  --page-gradient: linear-gradient(
+    135deg,
+    #ff6b9d 0%,
+    #c44dff 35%,
+    #4dabf7 70%,
+    #0a1628 100%
+  );
+  --page-gradient-end: #0a1628;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -15,7 +27,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--page-gradient-end);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -72,13 +84,7 @@ button {
   min-height: 100vh;
   padding: clamp(6rem, 14vh, 8rem) clamp(1.25rem, 5vw, 3rem)
     clamp(3rem, 8vh, 5rem);
-  background: linear-gradient(
-    135deg,
-    #ff6b9d 0%,
-    #c44dff 35%,
-    #4dabf7 70%,
-    #0a1628 100%
-  );
+  background: var(--page-gradient);
 }
 
 .page-shell__inner {
@@ -95,15 +101,69 @@ button {
 .page-shell h1 {
   margin: 0 0 0.5rem;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.125rem, 2.8vw, 1.5rem);
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.035em;
+  line-height: 1.25;
+  text-align: center;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .page-shell p,
 .page-shell li {
   color: var(--color-text-muted);
+}
+
+.page-shell h2 {
+  margin: 2rem 0 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+}
+
+.page-shell h3 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.page-shell hr {
+  margin: 1.75rem 0;
+  border: none;
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+}
+
+.page-shell ul,
+.page-shell ol {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+}
+
+.page-shell li + li {
+  margin-top: 0.35rem;
+}
+
+.page-shell .policy-note {
+  margin: 1.25rem 0;
+  padding: 1rem 1.125rem;
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 0.08);
+  border: 1px solid rgb(255 255 255 / 0.15);
+}
+
+.page-shell .policy-note strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.page-shell .policy-related {
+  margin-top: 2rem;
+  font-size: 0.95rem;
 }
 
 .page-shell a:not(.glass-pill):not(.nav-link) {
@@ -230,4 +290,13 @@ button {
 .contact-form__meta {
   padding-top: 1.25rem;
   border-top: 1px solid rgb(255 255 255 / 0.14);
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    padding-bottom: calc(
+      clamp(3rem, 8vh, 5rem) + var(--site-bottom-nav-offset) +
+        env(safe-area-inset-bottom, 0px)
+    );
+  }
 }

@@ -76,14 +76,37 @@ import { brand } from "../../brand.config";
         <p class="contact-form__status" id="contact-status" role="status"></p>
       </form>
 
-      <div class="contact-form__meta">
-        <p>
-          <strong>Email:</strong>{" "}
-          <a href={`mailto:${brand.supportEmail}`}>{brand.supportEmail}</a>
-        </p>
-        <p>
-          <strong>Hours:</strong> Mon–Fri, 9:00–18:00 (GMT+8)
-        </p>
+      <div class="contact-location">
+        <div class="contact-location__map">
+          <iframe
+            title="BYH factory location map"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(brand.address.full)}&hl=en&z=16&output=embed`}
+          ></iframe>
+        </div>
+        <div class="contact-location__info">
+          <p>
+            <strong>Address:</strong>
+            <span>
+              {brand.address.line1}<br />
+              {brand.address.city}, {brand.address.region}, {brand.address.country}
+            </span>
+          </p>
+          <p>
+            <strong>Email:</strong>{" "}
+            <a href={`mailto:${brand.supportEmail}`}>{brand.supportEmail}</a>
+          </p>
+          <p>
+            <strong>WhatsApp:</strong>{" "}
+            <a href={brand.whatsappUrl} target="_blank" rel="noopener noreferrer">
+              {brand.whatsapp}
+            </a>
+          </p>
+          <p>
+            <strong>Hours:</strong> Mon–Fri, 9:00–18:00 (GMT+8)
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -154,3 +177,70 @@ import { brand } from "../../brand.config";
     }
   });
 </script>
+
+<style>
+  .page-shell__inner {
+    width: min(56rem, 100%);
+  }
+
+  .contact-location {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+  }
+
+  .contact-location__map {
+    overflow: hidden;
+    min-height: 14rem;
+    border-radius: 1rem;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  }
+
+  .contact-location__map iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 14rem;
+    border: 0;
+    display: block;
+  }
+
+  .contact-location__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .contact-location__info p {
+    margin: 0;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .contact-location__info strong {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .contact-location__info span {
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 720px) {
+    .contact-location {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-location__map iframe {
+      min-height: 12rem;
+    }
+  }
+</style>

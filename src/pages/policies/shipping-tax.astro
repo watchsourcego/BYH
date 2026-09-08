@@ -1,21 +1,118 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PolicyContact from "../../components/PolicyContact.astro";
+import { brand } from "../../../brand.config";
 ---
 
 <BaseLayout title="Shipping & Tax">
   <div class="page-shell">
     <div class="page-shell__inner">
       <h1>Shipping &amp; Tax</h1>
-      <p><em>Last updated: September 2026</em></p>
       <p>
-        Orders ship within 2–5 business days. Standard delivery typically takes
-        7–14 business days depending on destination. Express options are
-        available at checkout.
+        At {brand.siteUrl} ("We", "Site"), we are committed to ensuring your
+        wholesale children's watch orders are delivered in a timely and efficient
+        manner. This policy outlines our shipping processes, tax practices, and
+        specific customs requirements for certain regions.
       </p>
+
+      <hr />
+
+      <h2>Stock preparation</h2>
       <p>
-        Applicable sales tax or VAT is calculated at checkout based on your
-        shipping address. International orders may be subject to customs duties
-        and import taxes, which are the responsibility of the recipient.
+        For orders with multiple models and colors, please allow 1–5 business days
+        for stock preparation. Orders placed on weekends or holidays will be
+        processed the next business day. For security purposes, initial orders or
+        those with alternate shipping addresses may require additional verification
+        time.
+      </p>
+
+      <h2>Shipping options &amp; charges</h2>
+      <p>
+        We offer free shipping to most countries on qualifying wholesale orders.
+        For specific regions requiring a shipping fee, or when you choose express
+        or freight-forwarder delivery, the amount will be calculated and clearly
+        confirmed in your quote or order form before checkout.
+      </p>
+
+      <h2>Order tracking</h2>
+      <p>Stay informed about your delivery every step of the way:</p>
+      <ul>
+        <li>
+          <strong>Online tracking:</strong> Once shipped, we will provide a tracking
+          number for online lookup.
+        </li>
+        <li>
+          <strong>WhatsApp notifications:</strong> For your convenience, tracking
+          details and order updates will be sent to you via WhatsApp.
+        </li>
+        <li>
+          <strong>Email updates:</strong> You will receive status updates and estimated
+          delivery dates via email.
+        </li>
+      </ul>
+
+      <h2>Special customs requirements (India, Brazil, etc.)</h2>
+      <p>
+        Certain countries require buyers to submit personal customs clearance
+        information in advance. Our team or local partners will contact you if
+        additional documents are needed for your destination.
+      </p>
+
+      <h2>For India customers (KYC requirements)</h2>
+      <p>
+        To ensure smooth customs clearance, Indian regulations require KYC (Know
+        Your Customer) documents.
+      </p>
+      <ol>
+        <li>
+          <strong>Required documents</strong><br />
+          Please provide a clear copy of one of the following:
+          <ul>
+            <li>Aadhaar Card, Voter ID, or Passport.</li>
+          </ul>
+          Note: Documents must show both the front (photo and date of birth) and
+          back (detailed address).
+        </li>
+        <li>
+          <strong>Submission process</strong><br />
+          Our local partners may contact you via WhatsApp, phone, or email. Please
+          send your tracking number and the KYC images to{" "}
+          <a href={`mailto:${brand.supportEmail}`}>{brand.supportEmail}</a>.
+        </li>
+      </ol>
+
+      <h2>Taxes &amp; duties</h2>
+      <p>
+        Import duties, VAT, GST, and other local taxes are calculated based on the
+        destination country's regulations. These charges may be included at checkout
+        or confirmed in your order quote, depending on the service selected.
+      </p>
+      <ul>
+        <li>
+          <strong>Invoices:</strong> If you require a formal invoice, please leave a
+          note during payment or contact us via email at{" "}
+          <a href={`mailto:${brand.supportEmail}`}>{brand.supportEmail}</a>.
+        </li>
+      </ul>
+
+      <h2>Delivery issues</h2>
+      <p>
+        If you encounter any issues with your delivery, please contact us
+        immediately. We will coordinate with our carriers to resolve the matter as
+        quickly as possible.
+      </p>
+
+      <h2>Title and risk of loss</h2>
+      <p>
+        All items purchased are made pursuant to a shipment contract. The risk of
+        loss and title for such items pass to you upon our delivery of the goods to
+        the carrier.
+      </p>
+
+      <PolicyContact />
+
+      <p class="policy-related">
+        Related: <a href="/policies/refund-policy">Refund policy</a>
       </p>
     </div>
   </div>

@@ -1,21 +1,155 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { brand } from "../../brand.config";
+
+const factoryImages = [
+  {
+    src: "/Factory-environment/BYH-factory01.webp",
+    alt: "BYH factory building exterior",
+  },
+  {
+    src: "/Factory-environment/BYH-factory02.webp",
+    alt: "Injection molding production floor",
+  },
+  {
+    src: "/Factory-environment/BYH-factory03.webp",
+    alt: "Workers operating manufacturing equipment",
+  },
+  {
+    src: "/Factory-environment/BYH-factory04.webp",
+    alt: "Assembly line for watch components",
+  },
+  {
+    src: "/Factory-environment/BYH-factory05.webp",
+    alt: "Finished goods warehouse and inventory",
+  },
+];
 ---
 
-<BaseLayout title="About" description={`About ${brand.name} — ${brand.tagline}`}>
+<BaseLayout
+  title="About"
+  description="About BYH Electronic Watch Co., Ltd. — precision engineering, smart wearables, and children's watches from Dongguan, China."
+>
   <div class="page-shell">
     <div class="page-shell__inner">
       <h1>About</h1>
       <p>
-        {brand.name} designs and manufactures children's watches with bold colors,
-        durable materials, and playful details — built for kids who move fast and
-        dream big.
+        Welcome to BYH Electronic Watch Co., Ltd., a premier manufacturer
+        dedicated to precision engineering, innovative design, and high-quality
+        wearable technology.
       </p>
       <p>
-        From our factory floor to your wrist, every piece is made with the same
-        energy we put into play: precise, reliable, and full of life.
+        Strategically located at No. 8, Jinshagang 6th Road, Dongguan, China,
+        our company brings together more than 20 years of solid manufacturing
+        expertise. We originated as a precision mold-making specialist—a unique
+        foundation that gives us complete in-house control over structural
+        integrity, tooling precision, and rapid product development. Over the
+        years, we have leveraged this core strength to evolve into a
+        full-service manufacturer specializing in digital timepieces, smart
+        wearables, and creative children's watches.
+      </p>
+
+      <h2>Our Core Strengths &amp; Product Portfolio</h2>
+      <ul>
+        <li>
+          <strong>Precision-Driven Quality:</strong> Rooted in our two-decade
+          mold-making heritage, every product undergoes strict quality control
+          from raw tooling and injection molding to final electronic assembly.
+        </li>
+        <li>
+          <strong>Smart &amp; Digital Watches:</strong> We design and produce
+          modern digital and smart wristbands featuring vibrant LED/OLED
+          displays, intuitive interfaces, and practical daily health/activity
+          tracking.
+        </li>
+        <li>
+          <strong>Innovative Children's Wearables:</strong> Designed with fun,
+          safety, and durability in mind, our children's range includes
+          touch-activated digital watches, multi-functional keychain/clip-on
+          watches, and interchangeable graphic-face designs using skin-friendly,
+          shock-resistant materials.
+        </li>
+        <li>
+          <strong>OEM / ODM Customization:</strong> With complete end-to-end
+          capabilities—from ID design and mold development to PCBA integration
+          and custom packaging—we provide flexible, reliable OEM and ODM
+          solutions for global brands.
+        </li>
+      </ul>
+
+      <p>
+        At BYH Electronic Watch Co., Ltd., we combine our manufacturing
+        craftsmanship with modern smart technology to deliver durable, stylish,
+        and dependable timepieces to clients worldwide.
       </p>
     </div>
+
+    <section class="factory-gallery" aria-label="Factory environment">
+      <ul class="factory-gallery__grid">
+        {factoryImages.map((image) => (
+          <li class="factory-gallery__item">
+            <img
+              src={image.src}
+              alt={image.alt}
+              width="640"
+              height="640"
+              loading="lazy"
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
   </div>
 </BaseLayout>
+
+<style>
+  .factory-gallery {
+    width: min(72rem, 100%);
+    margin: clamp(1.5rem, 4vw, 2.5rem) auto 0;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+    border-radius: 1.5rem;
+    background: rgb(255 255 255 / 0.1);
+    border: 1px solid rgb(255 255 255 / 0.22);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .factory-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.5rem, 1.2vw, 0.875rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .factory-gallery__item {
+    overflow: hidden;
+    border-radius: 0.875rem;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  }
+
+  .factory-gallery__item img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    transition: transform 240ms ease;
+  }
+
+  .factory-gallery__item:hover img {
+    transform: scale(1.04);
+  }
+
+  @media (max-width: 900px) {
+    .factory-gallery__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .factory-gallery {
+      padding: 0.875rem;
+    }
+  }
+</style>
