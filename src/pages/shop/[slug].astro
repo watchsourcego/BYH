@@ -1,16 +1,19 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProductDetailView from "../../components/ProductDetailView.astro";
-import { getAllProductDetails, getProductDetail } from "../../data/productDetails";
+import {
+  getAdjacentProducts,
+  getProductDetail,
+} from "../../data/productDetails";
+import { productSlugStaticPaths } from "@/lib/product-slug-paths";
 
 export function getStaticPaths() {
-  return getAllProductDetails().map((product) => ({
-    params: { slug: product.slug },
-  }));
+  return productSlugStaticPaths();
 }
 
 const { slug } = Astro.params;
 const product = getProductDetail(slug!);
+const { prev: prevProduct, next: nextProduct } = getAdjacentProducts(slug!);
 
 if (!product) {
   return Astro.redirect("/404");
@@ -23,6 +26,10 @@ if (!product) {
   grain={true}
 >
   <main>
-    <ProductDetailView product={product} />
+    <ProductDetailView
+      product={product}
+      prevProduct={prevProduct}
+      nextProduct={nextProduct}
+    />
   </main>
 </BaseLayout>

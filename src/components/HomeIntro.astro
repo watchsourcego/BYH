@@ -1,8 +1,10 @@
 ---
-import { brand } from "../../brand.config";
 import WhatsAppButton from "./WhatsAppButton.astro";
 import BrandLogo from "./BrandLogo.astro";
 import { homeWhatsAppMessage } from "../lib/whatsapp";
+import { localeHref } from "@/i18n/paths";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
 
 interface Props {
   /** Use "h1" on the primary intro (mobile hero). Desktop duplicate uses "p" to keep one h1 per page. */
@@ -12,21 +14,24 @@ interface Props {
 
 const { headingTag = "h1", headingId = "home-heading" } = Astro.props;
 const HeadingTag = headingTag;
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
+const href = (path: string) => localeHref(locale, path);
 ---
 
 <div class="home-intro">
   <HeadingTag id={headingId} class="home-intro__brand">
     <BrandLogo variant="light" class="home-intro__logo" width={120} height={44} />
   </HeadingTag>
-  <p class="home-intro__text">{brand.seo.homeIntro}</p>
+  <p class="home-intro__text">{t("Home.intro")}</p>
   <p class="home-intro__links">
-    <a href="/shop">Shop watches</a>
+    <a href={href("/shop")}>{t("Home.shopWatches")}</a>
     <span aria-hidden="true"> · </span>
-    <a href="/about">About us</a>
+    <a href={href("/about")}>{t("Home.aboutUs")}</a>
   </p>
   <WhatsAppButton
     message={homeWhatsAppMessage()}
-    context="homepage inquiry"
+    context={t("WhatsApp.homepageContext")}
     class="home-intro__whatsapp"
   />
 </div>

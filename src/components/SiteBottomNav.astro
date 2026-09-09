@@ -1,24 +1,18 @@
 ---
-type NavIcon = "home" | "shop" | "about" | "contact" | "policies";
+import { getMobileNav } from "../data/navigation";
+import { localeHref, stripLocalePrefix } from "@/i18n/paths";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
 
-type MobileNavItem = {
-  label: string;
-  href: string;
-  icon: NavIcon;
-};
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
+const href = (path: string) => localeHref(locale, path);
+const mobileNavItems = getMobileNav(t, href);
 
-const mobileNavItems: MobileNavItem[] = [
-  { label: "HOME", href: "/", icon: "home" },
-  { label: "SHOP", href: "/shop", icon: "shop" },
-  { label: "ABOUT", href: "/about", icon: "about" },
-  { label: "CONTACT", href: "/contact", icon: "contact" },
-  { label: "POLICIES", href: "/policies", icon: "policies" },
-];
+const currentPath = stripLocalePrefix(Astro.url.pathname);
 
-const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
-
-function isActive(href: string) {
-  const normalized = href.replace(/\/$/, "") || "/";
+function isActive(hrefPath: string) {
+  const normalized = stripLocalePrefix(hrefPath.replace(/\/$/, "") || "/");
   if (normalized === "/") return currentPath === "/";
   return currentPath === normalized || currentPath.startsWith(`${normalized}/`);
 }

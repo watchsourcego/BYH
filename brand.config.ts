@@ -3,7 +3,7 @@
  * BYH — children's watch manufacturer.
  */
 export const brand = {
-  name: "BYH",
+  name: "BYHTIMEPIECE",
   legalName: "BYH Electronic Watch Co., Ltd.",
   tagline: "Youthful watches built for every adventure.",
   siteUrl: "https://byhtimepiece.com",

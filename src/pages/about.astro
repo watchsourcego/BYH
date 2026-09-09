@@ -1,89 +1,39 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
+
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
 
 const factoryImages = [
-  {
-    src: "/Factory-environment/BYH-factory01.webp",
-    alt: "BYH factory building exterior",
-  },
-  {
-    src: "/Factory-environment/BYH-factory02.webp",
-    alt: "Injection molding production floor",
-  },
-  {
-    src: "/Factory-environment/BYH-factory03.webp",
-    alt: "Workers operating manufacturing equipment",
-  },
-  {
-    src: "/Factory-environment/BYH-factory04.webp",
-    alt: "Assembly line for watch components",
-  },
-  {
-    src: "/Factory-environment/BYH-factory05.webp",
-    alt: "Finished goods warehouse and inventory",
-  },
+  { src: "/Factory-environment/BYH-factory01.webp", alt: t("About.factoryAlt1") },
+  { src: "/Factory-environment/BYH-factory02.webp", alt: t("About.factoryAlt2") },
+  { src: "/Factory-environment/BYH-factory03.webp", alt: t("About.factoryAlt3") },
+  { src: "/Factory-environment/BYH-factory04.webp", alt: t("About.factoryAlt4") },
+  { src: "/Factory-environment/BYH-factory05.webp", alt: t("About.factoryAlt5") },
 ];
 ---
 
-<BaseLayout
-  title="About"
-  description="About BYH Electronic Watch Co., Ltd. — precision engineering, smart wearables, and children's watches from Dongguan, China."
->
+<BaseLayout title={t("About.title")} description={t("About.metaDescription")}>
   <div class="page-shell">
     <div class="page-shell__inner">
-      <h1>About</h1>
-      <p>
-        Welcome to BYH Electronic Watch Co., Ltd., a premier manufacturer
-        dedicated to precision engineering, innovative design, and high-quality
-        wearable technology.
-      </p>
-      <p>
-        Strategically located at No. 8, Jinshagang 6th Road, Dongguan, China,
-        our company brings together more than 20 years of solid manufacturing
-        expertise. We originated as a precision mold-making specialist—a unique
-        foundation that gives us complete in-house control over structural
-        integrity, tooling precision, and rapid product development. Over the
-        years, we have leveraged this core strength to evolve into a
-        full-service manufacturer specializing in digital timepieces, smart
-        wearables, and creative children's watches.
-      </p>
+      <h1>{t("About.title")}</h1>
+      <p>{t("About.intro1")}</p>
+      <p>{t("About.intro2")}</p>
 
-      <h2>Our Core Strengths &amp; Product Portfolio</h2>
+      <h2>{t("About.strengthsTitle")}</h2>
       <ul>
-        <li>
-          <strong>Precision-Driven Quality:</strong> Rooted in our two-decade
-          mold-making heritage, every product undergoes strict quality control
-          from raw tooling and injection molding to final electronic assembly.
-        </li>
-        <li>
-          <strong>Smart &amp; Digital Watches:</strong> We design and produce
-          modern digital and smart wristbands featuring vibrant LED/OLED
-          displays, intuitive interfaces, and practical daily health/activity
-          tracking.
-        </li>
-        <li>
-          <strong>Innovative Children's Wearables:</strong> Designed with fun,
-          safety, and durability in mind, our children's range includes
-          touch-activated digital watches, multi-functional keychain/clip-on
-          watches, and interchangeable graphic-face designs using skin-friendly,
-          shock-resistant materials.
-        </li>
-        <li>
-          <strong>OEM / ODM Customization:</strong> With complete end-to-end
-          capabilities—from ID design and mold development to PCBA integration
-          and custom packaging—we provide flexible, reliable OEM and ODM
-          solutions for global brands.
-        </li>
+        <li><strong>{t("About.strength1Title")}</strong> {t("About.strength1")}</li>
+        <li><strong>{t("About.strength2Title")}</strong> {t("About.strength2")}</li>
+        <li><strong>{t("About.strength3Title")}</strong> {t("About.strength3")}</li>
+        <li><strong>{t("About.strength4Title")}</strong> {t("About.strength4")}</li>
       </ul>
 
-      <p>
-        At BYH Electronic Watch Co., Ltd., we combine our manufacturing
-        craftsmanship with modern smart technology to deliver durable, stylish,
-        and dependable timepieces to clients worldwide.
-      </p>
+      <p>{t("About.closing")}</p>
     </div>
 
-    <section class="factory-gallery" aria-label="Factory environment">
+    <section class="factory-gallery" aria-label={t("About.factoryGallery")}>
       <ul class="factory-gallery__grid">
         {factoryImages.map((image) => (
           <li class="factory-gallery__item">

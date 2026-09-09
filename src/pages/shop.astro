@@ -1,19 +1,25 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { brand } from "../../brand.config";
 import { shopProducts } from "../data/products";
 import { brandAsset } from "../../brand.config";
+import { localeHref } from "@/i18n/paths";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
+
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
+const href = (path: string) => localeHref(locale, path);
 ---
 
-<BaseLayout title="Shop" description={`Shop ${brand.name} kids watches`}>
+<BaseLayout title={t("Shop.title")} description={t("Shop.metaDescription")}>
   <div class="page-shell">
     <div class="page-shell__inner shop">
-      <h1>Shop</h1>
-      <p>Explore our full collection of youth watches.</p>
+      <h1>{t("Shop.title")}</h1>
+      <p>{t("Shop.description")}</p>
       <ul class="shop-grid">
         {shopProducts.map((product) => (
           <li>
-            <a class="shop-card" href={product.href}>
+            <a class="shop-card" href={href(product.href)}>
               <img
                 src={brandAsset(product.image)}
                 alt={product.imageAlt}

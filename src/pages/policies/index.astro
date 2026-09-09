@@ -1,13 +1,21 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { policyNav } from "../../data/navigation";
+import { getPolicyNav } from "../../data/navigation";
+import { localeHref } from "@/i18n/paths";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
+
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
+const href = (path: string) => localeHref(locale, path);
+const policyNav = getPolicyNav(t, href);
 ---
 
-<BaseLayout title="Policies" description="Store policies">
+<BaseLayout title={t("Policies.title")} description={t("Policies.metaDescription")}>
   <div class="page-shell">
     <div class="page-shell__inner">
-      <h1>Policies</h1>
-      <p>Everything you need to know before and after your purchase.</p>
+      <h1>{t("Policies.title")}</h1>
+      <p>{t("Policies.intro")}</p>
       <ul class="policy-links">
         {policyNav.map((item) => (
           <li>

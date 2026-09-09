@@ -1,0 +1,158 @@
+{
+  "LocaleSwitcher": {
+    "label": "Language"
+  },
+  "DisplayCurrency": {
+    "label": "Currency",
+    "approx": "approx."
+  },
+  "Nav": {
+    "shop": "SHOP",
+    "about": "ABOUT",
+    "contact": "CONTACT",
+    "policies": "POLICIES",
+    "home": "HOME",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "refundPolicy": "Refund Policy",
+    "shippingTax": "Shipping & Tax"
+  },
+  "Home": {
+    "intro": "Kids LED touch-screen digital watches built for every adventure. Explore our full collection or learn about our factory in Dongguan.",
+    "shopWatches": "Shop watches",
+    "aboutUs": "About us"
+  },
+  "Shop": {
+    "title": "Shop",
+    "description": "Explore our full collection of youth watches.",
+    "metaDescription": "Shop BYHTIMEPIECE kids watches"
+  },
+  "About": {
+    "title": "About",
+    "metaDescription": "About BYH Electronic Watch Co., Ltd. — precision engineering, smart wearables, and children's watches from Dongguan, China.",
+    "intro1": "Welcome to BYH Electronic Watch Co., Ltd., a premier manufacturer dedicated to precision engineering, innovative design, and high-quality wearable technology.",
+    "intro2": "Strategically located at No. 8, Jinshagang 6th Road, Dongguan, China, our company brings together more than 20 years of solid manufacturing expertise. We originated as a precision mold-making specialist—a unique foundation that gives us complete in-house control over structural integrity, tooling precision, and rapid product development. Over the years, we have leveraged this core strength to evolve into a full-service manufacturer specializing in digital timepieces, smart wearables, and creative children's watches.",
+    "strengthsTitle": "Our Core Strengths & Product Portfolio",
+    "strength1Title": "Precision-Driven Quality:",
+    "strength1": "Rooted in our two-decade mold-making heritage, every product undergoes strict quality control from raw tooling and injection molding to final electronic assembly.",
+    "strength2Title": "Smart & Digital Watches:",
+    "strength2": "We design and produce modern digital and smart wristbands featuring vibrant LED/OLED displays, intuitive interfaces, and practical daily health/activity tracking.",
+    "strength3Title": "Innovative Children's Wearables:",
+    "strength3": "Designed with fun, safety, and durability in mind, our children's range includes touch-activated digital watches, multi-functional keychain/clip-on watches, and interchangeable graphic-face designs using skin-friendly, shock-resistant materials.",
+    "strength4Title": "OEM / ODM Customization:",
+    "strength4": "With complete end-to-end capabilities—from ID design and mold development to PCBA integration and custom packaging—we provide flexible, reliable OEM and ODM solutions for global brands.",
+    "closing": "At BYH Electronic Watch Co., Ltd., we combine our manufacturing craftsmanship with modern smart technology to deliver durable, stylish, and dependable timepieces to clients worldwide.",
+    "factoryGallery": "Factory environment",
+    "factoryAlt1": "BYH factory building exterior",
+    "factoryAlt2": "Injection molding production floor",
+    "factoryAlt3": "Workers operating manufacturing equipment",
+    "factoryAlt4": "Assembly line for watch components",
+    "factoryAlt5": "Finished goods warehouse and inventory"
+  },
+  "Contact": {
+    "title": "Contact",
+    "metaDescription": "Contact BYHTIMEPIECE",
+    "intro": "Questions about orders, wholesale, or custom designs? We'd love to hear from you.",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "subjectPlaceholder": "Order inquiry, wholesale, custom design...",
+    "message": "Message",
+    "send": "Send message",
+    "address": "Address",
+    "hours": "Hours",
+    "hoursValue": "Mon–Fri, 9:00–18:00 (GMT+8)",
+    "mapTitle": "BYH factory location map",
+    "success": "Thanks — your message has been sent.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorNetwork": "Network error. If you're testing locally, deploy to Cloudflare Pages first.",
+    "errorNotDeployed": "Contact form API is not deployed yet. Please redeploy the site or email us directly.",
+    "errorUnavailable": "Contact service unavailable. Please email us directly."
+  },
+  "Product": {
+    "moq": "Minimum quantity is 300pcs per color",
+    "infoPanel": "Product information",
+    "mediaTabs": "Product media",
+    "watchVideo": "Watch product video",
+    "watchVideoShort": "Watch video",
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "ProductParam": {
+    "variantColor": "Color {id}",
+    "sections": {
+      "basicInfo": "Basic Info",
+      "dimensionsWeight": "Dimensions & Weight",
+      "materials": "Materials"
+    },
+    "labels": {
+      "itemName": "Item Name",
+      "modelNo": "Model / Item NO.",
+      "movement": "Movement",
+      "battery": "Battery",
+      "availableColors": "Available Colors",
+      "functions": "Functions",
+      "waterResistance": "Water Resistance",
+      "waterproof": "Waterproof",
+      "caseSize": "Case Size",
+      "caseThickness": "Case Thickness",
+      "lanyardDiameter": "Lanyard Diameter",
+      "totalLength": "Total Length",
+      "lanyardPerimeter": "Lanyard Perimeter",
+      "netWeight": "Net Weight",
+      "bandWidth": "Band Width",
+      "wristFitPerimeter": "Wrist Fit / Perimeter",
+      "caseMaterial": "Case Material",
+      "lanyardStrapMaterial": "Lanyard / Strap Material",
+      "strapMaterial": "Strap Material",
+      "mirrorCrystal": "Mirror / Crystal",
+      "mirror": "Mirror",
+      "claspHookMaterial": "Clasp / Hook Material",
+      "bucklePinMaterial": "Buckle / Pin Material",
+      "buckle": "Buckle",
+      "caseback": "Caseback"
+    },
+    "values": {
+      "no": "No",
+      "yesWaterproof": "Yes (Waterproof)",
+      "ledDigitalMovement": "LED Digital Movement",
+      "functionsStandard": "Hour, Minute, Second, Month, Date",
+      "batteryCells": "1130 Button Cell × 2 pcs",
+      "colorOne": "1 Color",
+      "colors": "{count} Colors",
+      "plasticAbs": "Plastic ABS",
+      "plasticTpu": "Plastic TPU",
+      "plasticTpe": "Plastic TPE",
+      "plasticPc": "Plastic PC",
+      "plasticBackCover": "Plastic Back Cover",
+      "plasticAbsBaseSealing": "Plastic ABS Base Sealing",
+      "braidedFabric": "Braided Fabric",
+      "glass": "Glass",
+      "zincAlloy": "Zinc Alloy",
+      "stainlessIron": "Stainless Iron",
+      "stainlessSteel": "Stainless Steel",
+      "stainlessSteelIron": "Stainless Steel (Stainless Iron)",
+      "ledWatch": "LED Watch",
+      "buttonLedWatch": "Button LED Watch",
+      "touchLedWatch": "Touch LED Watch",
+      "touchLedWristWatch": "Touch LED Wrist Watch",
+      "touchLedPendantWatch": "Touch LED Pendant Watch",
+      "ledWatchM4TwoColorStrap": "LED Watch (M4 Two-Color Strap Version)",
+      "ledWatchM3Transparent": "LED Watch (M3 Transparent Version)"
+    }
+  },
+  "Policies": {
+    "title": "Policies",
+    "metaDescription": "Store policies",
+    "intro": "Everything you need to know before and after your purchase.",
+    "termsTitle": "Terms of Service",
+    "privacyTitle": "Privacy Policy",
+    "refundTitle": "Refund Policy",
+    "shippingTitle": "Shipping & Tax"
+  },
+  "WhatsApp": {
+    "label": "WhatsApp",
+    "contactAria": "Contact us on WhatsApp — {context}",
+    "homepageContext": "homepage inquiry"
+  }
+}

@@ -2,12 +2,15 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PolicyContact from "../../components/PolicyContact.astro";
 import { brand } from "../../../brand.config";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+
+const t = useTranslations(resolveLocale(Astro.currentLocale));
 ---
 
-<BaseLayout title="Terms of Service">
+<BaseLayout title={t("Policies.termsTitle")}>
   <div class="page-shell">
     <div class="page-shell__inner">
-      <h1>Terms of Service</h1>
+      <h1>{t("Policies.termsTitle")}</h1>
       <p><em>Last updated: September 2026</em></p>
       <p>
         This website is operated by {brand.name}. Throughout the site, the terms

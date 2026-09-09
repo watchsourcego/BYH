@@ -2,12 +2,15 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PolicyContact from "../../components/PolicyContact.astro";
 import { brand } from "../../../brand.config";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+
+const t = useTranslations(resolveLocale(Astro.currentLocale));
 ---
 
-<BaseLayout title="Shipping & Tax">
+<BaseLayout title={t("Policies.shippingTitle")}>
   <div class="page-shell">
     <div class="page-shell__inner">
-      <h1>Shipping &amp; Tax</h1>
+      <h1>{t("Policies.shippingTitle")}</h1>
       <p>
         At {brand.siteUrl} ("We", "Site"), we are committed to ensuring your
         wholesale children's watch orders are delivered in a timely and efficient

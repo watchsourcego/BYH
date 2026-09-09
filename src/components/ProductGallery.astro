@@ -2,6 +2,15 @@
 import { homeProducts, galleryHeightVh } from "../data/products";
 import { brandAsset } from "../../brand.config";
 import HomeIntro from "./HomeIntro.astro";
+import { localeHref } from "@/i18n/paths";
+import { resolveLocale } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
+
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const localizedProducts = homeProducts.map((product) => ({
+  ...product,
+  href: localeHref(locale, product.href),
+}));
 ---
 
 <section class="gallery" aria-label="Featured watches" style={`--gallery-height: ${galleryHeightVh}vh`}>
@@ -13,7 +22,7 @@ import HomeIntro from "./HomeIntro.astro";
 
   <!-- Desktop -->
   <div class="gallery__desktop">
-    {homeProducts.map((product) => (
+    {localizedProducts.map((product) => (
       <a
         class="gallery__item gallery__item--desktop"
         href={product.href}
@@ -47,7 +56,7 @@ import HomeIntro from "./HomeIntro.astro";
     <div class="gallery__slide gallery__slide--intro">
       <HomeIntro headingTag="h1" />
     </div>
-    {homeProducts.map((product) => (
+    {localizedProducts.map((product) => (
       <div class="gallery__slide gallery__slide--product">
         <a class="gallery__item gallery__item--mobile" href={product.href} aria-label={product.name}>
           <img

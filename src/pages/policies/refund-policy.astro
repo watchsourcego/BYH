@@ -2,12 +2,15 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PolicyContact from "../../components/PolicyContact.astro";
 import { brand } from "../../../brand.config";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+
+const t = useTranslations(resolveLocale(Astro.currentLocale));
 ---
 
-<BaseLayout title="Refund Policy">
+<BaseLayout title={t("Policies.refundTitle")}>
   <div class="page-shell">
     <div class="page-shell__inner">
-      <h1>Refund Policy</h1>
+      <h1>{t("Policies.refundTitle")}</h1>
       <p>
         {brand.name} is a children's watch manufacturer supplying B2B wholesale,
         ready-stock, and custom OEM/ODM orders. Policies differ by order type —

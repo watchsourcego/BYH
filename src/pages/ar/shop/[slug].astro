@@ -1,0 +1,10 @@
+---
+import Page from "../../shop/[slug].astro";
+import { productSlugStaticPaths } from "@/lib/product-slug-paths";
+
+export function getStaticPaths() {
+  return productSlugStaticPaths();
+}
+---
+
+<Page />

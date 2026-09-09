@@ -1,35 +1,121 @@
 ---
 import type { ProductDetail } from "../data/productDetails";
-import { MIN_ORDER_QUANTITY } from "../data/productDetails";
 import { brand, brandAsset } from "../../brand.config";
 import WhatsAppButton from "./WhatsAppButton.astro";
 import { productWhatsAppMessage } from "../lib/whatsapp";
+import { parseCnyFromPrice } from "@/lib/parse-cny-price";
+import {
+  DISPLAY_FX_FALLBACK_RATES,
+  formatCnyLabel,
+  formatDisplayCnyParts,
+  inferDisplayCurrencyFromLocale,
+} from "@/lib/display-currency";
+import { localeHref } from "@/i18n/paths";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import {
+  translateParamLabel,
+  translateParamSection,
+  translateParamValue,
+  translateVariantLabel,
+} from "@/i18n/product-params";
+import type { Locale } from "@/i18n/config";
 
 interface Props {
   product: ProductDetail;
+  prevProduct?: ProductDetail | null;
+  nextProduct?: ProductDetail | null;
 }
 
-const { product } = Astro.props;
+const { product, prevProduct = null, nextProduct = null } = Astro.props;
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
+const href = (path: string) => localeHref(locale, path);
 const initialVariant = product.variants[0];
-const pageUrl = new URL(`/shop/${product.slug}/`, Astro.site).href;
+const productPath = href(`/shop/${product.slug}/`);
+const pageUrl = new URL(productPath, Astro.site).href;
+const cnyPrice = parseCnyFromPrice(product.price);
+const initialDisplayCurrency = inferDisplayCurrencyFromLocale(locale);
+const initialPriceParts =
+  cnyPrice != null
+    ? formatDisplayCnyParts(cnyPrice, initialDisplayCurrency, DISPLAY_FX_FALLBACK_RATES)
+    : null;
 const whatsappMessage = productWhatsAppMessage({
   title: product.title,
   sku: product.sku,
-  color: initialVariant.label,
+  color: translateVariantLabel(initialVariant.label, t),
   pageUrl,
 });
 ---
 
-<section class="product-detail" data-product-detail>
+<section
+  class="product-detail"
+  data-product-detail
+  data-prev-href={prevProduct ? href(`/shop/${prevProduct.slug}/`) : undefined}
+  data-next-href={nextProduct ? href(`/shop/${nextProduct.slug}/`) : undefined}
+>
   <div class="product-detail__stage">
-    <img
-      class="product-detail__hero"
-      data-hero-image
-      src={brandAsset(initialVariant.image)}
-      alt={`${product.title} — ${initialVariant.label}`}
-      width="800"
-      height="800"
-    />
+    {prevProduct && (
+      <a
+        class="product-detail__nav product-detail__nav--prev"
+        href={href(`/shop/${prevProduct.slug}/`)}
+        aria-label={`${t("Product.prev")}: ${prevProduct.title}`}
+        title={prevProduct.title}
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            d="M12.5 4.5 7 10l5.5 5.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a>
+    )}
+
+    <div class="product-detail__media" data-hero-media>
+      <img
+        class="product-detail__hero"
+        data-hero-image
+        src={brandAsset(initialVariant.image)}
+        alt={`${product.title} — ${initialVariant.label}`}
+        width="800"
+        height="800"
+      />
+
+      {product.video && (
+        <video
+          class="product-detail__hero product-detail__hero-video"
+          data-hero-video
+          src={brandAsset(product.video)}
+          controls
+          playsinline
+          preload="metadata"
+          hidden
+        />
+      )}
+    </div>
+
+    {nextProduct && (
+      <a
+        class="product-detail__nav product-detail__nav--next"
+        href={href(`/shop/${nextProduct.slug}/`)}
+        aria-label={`${t("Product.next")}: ${nextProduct.title}`}
+        title={nextProduct.title}
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            d="M7.5 4.5 13 10l-5.5 5.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a>
+    )}
   </div>
 
   <WhatsAppButton
@@ -45,17 +131,37 @@ const whatsappMessage = productWhatsAppMessage({
     whatsappBase={brand.whatsappUrl}
   />
 
-  <div class="product-detail__variant-bar" role="tablist" aria-label="Color variants">
+  <div class="product-detail__variant-bar" role="tablist" aria-label={t("Product.mediaTabs")}>
+    {product.video && (
+      <>
+        <button
+          type="button"
+          class="product-detail__video-btn"
+          data-video-btn
+          aria-label={t("Product.watchVideo")}
+          title={t("Product.watchVideoShort")}
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            <path
+              d="M6.5 4.5v9l7.5-4.5-7.5-4.5Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <span class="product-detail__variant-divider" aria-hidden="true" />
+      </>
+    )}
+
     {product.variants.map((variant, index) => (
       <button
         type="button"
         class:list={["product-detail__variant", { "is-active": index === 0 }]}
         role="tab"
         aria-selected={index === 0 ? "true" : "false"}
-        aria-label={variant.label}
+        aria-label={translateVariantLabel(variant.label, t)}
         data-variant-btn
         data-image={brandAsset(variant.image)}
-        data-label={variant.label}
+        data-label={translateVariantLabel(variant.label, t)}
       >
         <img
           src={brandAsset(variant.image)}
@@ -68,13 +174,30 @@ const whatsappMessage = productWhatsAppMessage({
     ))}
   </div>
 
-  <aside class="product-detail__panel" aria-label="Product information">
+  <aside class="product-detail__panel" aria-label={t("Product.infoPanel")}>
     <h1 class="product-detail__title">{product.title}</h1>
 
     {product.price && (
-      <p class="product-detail__price">{product.price}</p>
+      <div
+        class="product-detail__price"
+        data-dual-cny-price
+        data-cny-price={cnyPrice ?? undefined}
+        aria-label={cnyPrice ? formatCnyLabel(cnyPrice) : product.price}
+      >
+        <span class="product-detail__price-cny" data-cny-primary>
+          {cnyPrice ? formatCnyLabel(cnyPrice) : product.price}
+        </span>
+        {cnyPrice && initialPriceParts?.approx && (
+          <span class="product-detail__price-approx" data-cny-approx>
+            ≈ {initialPriceParts.approx}
+          </span>
+        )}
+        {cnyPrice && !initialPriceParts?.approx && (
+          <span class="product-detail__price-approx" data-cny-approx hidden />
+        )}
+      </div>
     )}
-    <p class="product-detail__moq">{MIN_ORDER_QUANTITY}</p>
+    <p class="product-detail__moq">{t("Product.moq")}</p>
 
     <p class="product-detail__description">{product.description}</p>
 
@@ -83,12 +206,12 @@ const whatsappMessage = productWhatsAppMessage({
     <div class="product-detail__parameters">
       {product.parameters.map((section) => (
         <section class="product-detail__param-section">
-          <h2>{section.title}</h2>
+          <h2>{translateParamSection(section.title, t)}</h2>
           <dl>
             {section.items.map((item) => (
               <div class="product-detail__param-row">
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
+                <dt>{translateParamLabel(item.label, t)}</dt>
+                <dd>{translateParamValue(item.value, t)}</dd>
               </div>
             ))}
           </dl>
@@ -122,19 +245,65 @@ const whatsappMessage = productWhatsAppMessage({
     waBtn.href = buildProductWhatsAppUrl(waBtn, color);
   }
 
+  function showHeroImage(
+    hero: HTMLImageElement,
+    video: HTMLVideoElement | null,
+    videoBtn: HTMLButtonElement | null,
+    variantButtons: NodeListOf<HTMLButtonElement>,
+  ) {
+    hero.hidden = false;
+    if (video) {
+      video.pause();
+      video.hidden = true;
+    }
+    videoBtn?.classList.remove("is-active");
+    videoBtn?.setAttribute("aria-selected", "false");
+    variantButtons.forEach((btn) => {
+      btn.setAttribute("aria-selected", btn.classList.contains("is-active") ? "true" : "false");
+    });
+  }
+
+  function showHeroVideo(
+    hero: HTMLImageElement,
+    video: HTMLVideoElement,
+    videoBtn: HTMLButtonElement,
+    variantButtons: NodeListOf<HTMLButtonElement>,
+  ) {
+    hero.hidden = true;
+    video.hidden = false;
+    videoBtn.classList.add("is-active");
+    videoBtn.setAttribute("aria-selected", "true");
+    variantButtons.forEach((btn) => {
+      btn.classList.remove("is-active");
+      btn.setAttribute("aria-selected", "false");
+    });
+    void video.play().catch(() => {
+      /* autoplay may be blocked until user interacts */
+    });
+  }
+
   function initProductDetail() {
     const root = document.querySelector<HTMLElement>("[data-product-detail]");
     if (!root) return;
 
     const hero = root.querySelector<HTMLImageElement>("[data-hero-image]");
+    const video = root.querySelector<HTMLVideoElement>("[data-hero-video]");
+    const videoBtn = root.querySelector<HTMLButtonElement>("[data-video-btn]");
     const buttons = root.querySelectorAll<HTMLButtonElement>("[data-variant-btn]");
     if (!hero || !buttons.length) return;
+
+    videoBtn?.addEventListener("click", () => {
+      if (!video) return;
+      showHeroVideo(hero, video, videoBtn, buttons);
+    });
 
     buttons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const image = btn.dataset.image;
         const label = btn.dataset.label;
         if (!image) return;
+
+        showHeroImage(hero, video, videoBtn, buttons);
 
         hero.src = image;
         if (label) {
@@ -151,8 +320,47 @@ const whatsappMessage = productWhatsAppMessage({
     });
   }
 
+  function initProductNav() {
+    const root = document.querySelector<HTMLElement>("[data-product-detail]");
+    if (!root) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+      ) {
+        return;
+      }
+
+      const prevHref = root.dataset.prevHref;
+      const nextHref = root.dataset.nextHref;
+
+      if (event.key === "ArrowLeft" && prevHref) {
+        window.location.assign(prevHref);
+      } else if (event.key === "ArrowRight" && nextHref) {
+        window.location.assign(nextHref);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        document.removeEventListener("keydown", onKeyDown);
+      },
+      { once: true },
+    );
+  }
+
   initProductDetail();
-  document.addEventListener("astro:page-load", initProductDetail);
+  initProductNav();
+  document.addEventListener("astro:page-load", () => {
+    initProductDetail();
+    initProductNav();
+  });
 </script>
 
 <style>
@@ -171,9 +379,17 @@ const whatsappMessage = productWhatsAppMessage({
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
     padding: clamp(5rem, 12vh, 7rem) clamp(1rem, 4vw, 2rem)
       clamp(8rem, 18vh, 10rem);
     pointer-events: none;
+  }
+
+  .product-detail__media {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .product-detail__hero {
@@ -182,6 +398,48 @@ const whatsappMessage = productWhatsAppMessage({
     object-fit: contain;
     filter: drop-shadow(0 24px 48px rgb(0 0 0 / 0.45));
     transition: opacity 220ms ease;
+  }
+
+  .product-detail__hero-video {
+    border-radius: 0.75rem;
+    background: #000;
+  }
+
+  .product-detail__hero-video[hidden],
+  .product-detail__hero[hidden] {
+    display: none;
+  }
+
+  .product-detail__nav {
+    pointer-events: auto;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    background: rgb(255 255 255 / 0.18);
+    border: 1px solid rgb(255 255 255 / 0.32);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px rgb(0 0 0 / 0.18);
+    transition:
+      background 180ms ease,
+      transform 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .product-detail__nav:hover {
+    background: rgb(255 255 255 / 0.28);
+    border-color: rgb(255 255 255 / 0.5);
+    transform: translateY(-2px);
+  }
+
+  .product-detail__nav:active {
+    transform: translateY(0) scale(0.96);
   }
 
   .product-detail__variant-bar {
@@ -199,6 +457,49 @@ const whatsappMessage = productWhatsAppMessage({
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 20px rgb(0 0 0 / 0.18);
+  }
+
+  .product-detail__video-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border-radius: 999px;
+    border: 2px solid rgb(255 255 255 / 0.35);
+    background: rgb(0 0 0 / 0.35);
+    color: var(--color-accent);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    user-select: none;
+    touch-action: manipulation;
+    cursor: pointer;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      transform 180ms ease,
+      color 180ms ease;
+  }
+
+  .product-detail__video-btn:focus,
+  .product-detail__video-btn:focus-visible {
+    outline: none;
+  }
+
+  .product-detail__video-btn.is-active,
+  .product-detail__video-btn:focus-visible.is-active {
+    border-color: var(--color-accent);
+    background: rgb(255 77 109 / 0.22);
+    color: #fff;
+  }
+
+  .product-detail__variant-divider {
+    flex-shrink: 0;
+    width: 1px;
+    height: 1.75rem;
+    background: rgb(255 255 255 / 0.28);
   }
 
   .product-detail__variant {
@@ -239,16 +540,24 @@ const whatsappMessage = productWhatsAppMessage({
   }
 
   @media (hover: hover) {
+    .product-detail__video-btn:hover {
+      border-color: rgb(255 255 255 / 0.6);
+      background: rgb(0 0 0 / 0.5);
+      transform: translateY(-2px);
+    }
+
     .product-detail__variant:hover {
       transform: translateY(-2px);
     }
 
+    .product-detail__video-btn:active,
     .product-detail__variant:active {
       transform: translateY(-2px) scale(0.96);
     }
   }
 
   @media (hover: none) {
+    .product-detail__video-btn:active,
     .product-detail__variant:active {
       transform: scale(0.96);
     }
@@ -290,11 +599,31 @@ const whatsappMessage = productWhatsAppMessage({
   }
 
   .product-detail__price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
     margin: 0.625rem 0 0;
+  }
+
+  .product-detail__price-cny {
     font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .product-detail__price-approx {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgb(255 255 255 / 0.65);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .product-detail__price-approx[hidden] {
+    display: none;
   }
 
   .product-detail__moq {
@@ -402,14 +731,24 @@ const whatsappMessage = productWhatsAppMessage({
       position: relative;
       inset: auto;
       flex-shrink: 0;
-      padding: clamp(5rem, 12vh, 6rem) 1rem clamp(1.5rem, 4vh, 2.5rem);
+      padding: clamp(5rem, 12vh, 6rem) 0.5rem clamp(1.5rem, 4vh, 2.5rem);
       pointer-events: auto;
     }
 
     .product-detail__hero {
-      width: min(88vw, 420px);
+      width: min(72vw, 420px);
       max-height: none;
       margin: 0 auto;
+    }
+
+    .product-detail__nav {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+
+    .product-detail__nav svg {
+      width: 16px;
+      height: 16px;
     }
 
     .product-detail :global(.product-detail__whatsapp) {
@@ -456,10 +795,20 @@ const whatsappMessage = productWhatsAppMessage({
       display: none;
     }
 
+    .product-detail__video-btn,
     .product-detail__variant {
       width: 2.25rem;
       height: 2.25rem;
       border-width: 1.5px;
+    }
+
+    .product-detail__video-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .product-detail__variant-divider {
+      height: 1.5rem;
     }
 
     .product-detail__title,

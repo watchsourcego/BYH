@@ -32,6 +32,8 @@ export interface ProductDetail {
   imageBase: string;
   variants: ProductVariant[];
   parameters: ProductParameterSection[];
+  /** First video found in `video/` subfolder, or product root */
+  video?: string;
 }
 
 export const MIN_ORDER_QUANTITY = "Minimum quantity is 300pcs per color";
@@ -50,6 +52,32 @@ function variantIdFromFilename(filename: string, index: number): string {
   if (suffixed) return suffixed[1];
 
   return String(index + 1).padStart(2, "0");
+}
+
+const VIDEO_EXTENSIONS = /\.(?:mp4|webm|mov)$/i;
+
+function discoverVideo(sku: string, folderPath: string): string | undefined {
+  const searchDirs = [
+    path.join(folderPath, "video"),
+    folderPath,
+  ];
+
+  for (const dir of searchDirs) {
+    if (!fs.existsSync(dir)) continue;
+
+    const files = fs
+      .readdirSync(dir, { withFileTypes: true })
+      .filter((entry) => entry.isFile() && VIDEO_EXTENSIONS.test(entry.name))
+      .map((entry) => entry.name)
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+    if (files.length > 0) {
+      const subpath = dir === folderPath ? "" : "video/";
+      return `/products/${sku}/${subpath}${files[0]}`;
+    }
+  }
+
+  return undefined;
 }
 
 function discoverVariants(sku: string, folderPath: string): ProductVariant[] {
@@ -98,6 +126,7 @@ function loadProductDetail(sku: string): ProductDetail | null {
   const itemName =
     basicInfo?.items.find((item) => item.label === "Item Name")?.value ?? sku;
   const variants = discoverVariants(sku, folderPath);
+  const video = discoverVideo(sku, folderPath);
 
   if (!variants.length) return null;
 
@@ -112,6 +141,7 @@ function loadProductDetail(sku: string): ProductDetail | null {
     imageBase: `/products/${sku}`,
     variants,
     parameters: sections,
+    ...(video ? { video } : {}),
   };
 }
 
@@ -135,15 +165,36 @@ function loadAllProducts(): Record<string, ProductDetail> {
 export const productDetails: Record<string, ProductDetail> = loadAllProducts();
 
 export function getProductDetail(slug: string): ProductDetail | undefined {
-  const aliases: Record<string, string> = {
-    "byh-26-18": "byh-26-18-normol",
-  };
-  const resolvedSlug = aliases[slug] ?? slug;
-  return productDetails[resolvedSlug];
+  return productDetails[resolveProductSlug(slug)];
 }
 
 export function getAllProductDetails(): ProductDetail[] {
   return Object.values(productDetails).sort((a, b) =>
     a.sku.localeCompare(b.sku, undefined, { numeric: true }),
   );
+}
+
+function resolveProductSlug(slug: string): string {
+  const aliases: Record<string, string> = {
+    "byh-26-18": "byh-26-18-normol",
+  };
+  return aliases[slug] ?? slug;
+}
+
+export function getAdjacentProducts(currentSlug: string): {
+  prev: ProductDetail | null;
+  next: ProductDetail | null;
+} {
+  const resolvedSlug = resolveProductSlug(currentSlug);
+  const products = getAllProductDetails();
+  const index = products.findIndex((product) => product.slug === resolvedSlug);
+
+  if (index === -1) {
+    return { prev: null, next: null };
+  }
+
+  return {
+    prev: index > 0 ? products[index - 1] : null,
+    next: index < products.length - 1 ? products[index + 1] : null,
+  };
 }

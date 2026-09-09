@@ -1,10 +1,19 @@
 ---
-import { mainNav, policyNav } from "../data/navigation";
+import { getMainNav, getPolicyNav } from "../data/navigation";
+import { localeHref, stripLocalePrefix } from "@/i18n/paths";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
 
-const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
+const href = (path: string) => localeHref(locale, path);
+const mainNav = getMainNav(t, href);
+const policyNav = getPolicyNav(t, href);
 
-function isActive(href: string) {
-  const normalized = href.replace(/\/$/, "") || "/";
+const currentPath = stripLocalePrefix(Astro.url.pathname);
+
+function isActive(hrefPath: string) {
+  const normalized = stripLocalePrefix(hrefPath.replace(/\/$/, "") || "/");
   if (normalized === "/") return currentPath === "/";
   return currentPath === normalized || currentPath.startsWith(`${normalized}/`);
 }
@@ -33,7 +42,7 @@ const policiesActive = isActive("/policies");
         aria-current={policiesActive ? "page" : undefined}
         id="policies-trigger"
       >
-        POLICIES
+        {t("Nav.policies")}
         <svg class="nav-dropdown__chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
           <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" />
         </svg>

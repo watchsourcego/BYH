@@ -1,20 +1,31 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { brand } from "../../brand.config";
+import { resolveLocale, useTranslations } from "@/i18n/ui";
+import type { Locale } from "@/i18n/config";
+
+const locale = resolveLocale(Astro.currentLocale) as Locale;
+const t = useTranslations(locale);
 ---
 
-<BaseLayout title="Contact" description={`Contact ${brand.name}`}>
+<BaseLayout title={t("Contact.title")} description={t("Contact.metaDescription")}>
   <div class="page-shell">
     <div class="page-shell__inner">
-      <h1>Contact</h1>
-      <p>
-        Questions about orders, wholesale, or custom designs? We'd love to hear
-        from you.
-      </p>
+      <h1>{t("Contact.title")}</h1>
+      <p>{t("Contact.intro")}</p>
 
-      <form class="contact-form" id="contact-form" novalidate>
+      <form
+        class="contact-form"
+        id="contact-form"
+        novalidate
+        data-msg-success={t("Contact.success")}
+        data-msg-error={t("Contact.errorGeneric")}
+        data-msg-network={t("Contact.errorNetwork")}
+        data-msg-not-deployed={t("Contact.errorNotDeployed")}
+        data-msg-unavailable={t("Contact.errorUnavailable")}
+      >
         <div class="contact-form__field">
-          <label for="contact-name">Name</label>
+          <label for="contact-name">{t("Contact.name")}</label>
           <input
             id="contact-name"
             name="name"
@@ -26,7 +37,7 @@ import { brand } from "../../brand.config";
         </div>
 
         <div class="contact-form__field">
-          <label for="contact-email">Email</label>
+          <label for="contact-email">{t("Contact.email")}</label>
           <input
             id="contact-email"
             name="email"
@@ -38,18 +49,18 @@ import { brand } from "../../brand.config";
         </div>
 
         <div class="contact-form__field">
-          <label for="contact-subject">Subject</label>
+          <label for="contact-subject">{t("Contact.subject")}</label>
           <input
             id="contact-subject"
             name="subject"
             type="text"
             maxlength="200"
-            placeholder="Order inquiry, wholesale, custom design..."
+            placeholder={t("Contact.subjectPlaceholder")}
           />
         </div>
 
         <div class="contact-form__field">
-          <label for="contact-message">Message</label>
+          <label for="contact-message">{t("Contact.message")}</label>
           <textarea
             id="contact-message"
             name="message"
@@ -70,7 +81,7 @@ import { brand } from "../../brand.config";
         </div>
 
         <button class="contact-form__submit" type="submit">
-          Send message
+          {t("Contact.send")}
         </button>
 
         <p class="contact-form__status" id="contact-status" role="status"></p>
@@ -79,32 +90,32 @@ import { brand } from "../../brand.config";
       <div class="contact-location">
         <div class="contact-location__map">
           <iframe
-            title="BYH factory location map"
+            title={t("Contact.mapTitle")}
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            src={`https://maps.google.com/maps?q=${encodeURIComponent(brand.address.full)}&hl=en&z=16&output=embed`}
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(brand.address.full)}&hl=${locale}&z=16&output=embed`}
           ></iframe>
         </div>
         <div class="contact-location__info">
           <p>
-            <strong>Address:</strong>
+            <strong>{t("Contact.address")}:</strong>
             <span>
               {brand.address.line1}<br />
               {brand.address.city}, {brand.address.region}, {brand.address.country}
             </span>
           </p>
           <p>
-            <strong>Email:</strong>{" "}
+            <strong>{t("Contact.email")}:</strong>{" "}
             <a href={`mailto:${brand.supportEmail}`}>{brand.supportEmail}</a>
           </p>
           <p>
-            <strong>WhatsApp:</strong>{" "}
+            <strong>{t("WhatsApp.label")}:</strong>{" "}
             <a href={brand.whatsappUrl} target="_blank" rel="noopener noreferrer">
               {brand.whatsapp}
             </a>
           </p>
           <p>
-            <strong>Hours:</strong> Mon–Fri, 9:00–18:00 (GMT+8)
+            <strong>{t("Contact.hours")}:</strong> {t("Contact.hoursValue")}
           </p>
         </div>
       </div>
@@ -150,8 +161,8 @@ import { brand } from "../../brand.config";
       if (!contentType.includes("application/json")) {
         status.textContent =
           response.status === 404
-            ? "Contact form API is not deployed yet. Please redeploy the site or email us directly."
-            : "Contact service unavailable. Please email us directly.";
+            ? form.dataset.msgNotDeployed ?? "Contact form API is not deployed yet."
+            : form.dataset.msgUnavailable ?? "Contact service unavailable.";
         status.dataset.state = "error";
         return;
       }
@@ -159,18 +170,16 @@ import { brand } from "../../brand.config";
       const result = (await response.json()) as { ok?: boolean; error?: string };
 
       if (!response.ok || !result.ok) {
-        status.textContent =
-          result.error ?? "Something went wrong. Please try again.";
+        status.textContent = result.error ?? form.dataset.msgError ?? "Something went wrong.";
         status.dataset.state = "error";
         return;
       }
 
       form.reset();
-      status.textContent = "Thanks — your message has been sent.";
+      status.textContent = form.dataset.msgSuccess ?? "Thanks — your message has been sent.";
       status.dataset.state = "success";
     } catch {
-      status.textContent =
-        "Network error. If you're testing locally, deploy to Cloudflare Pages first.";
+      status.textContent = form.dataset.msgNetwork ?? "Network error.";
       status.dataset.state = "error";
     } finally {
       submitButton?.removeAttribute("disabled");
