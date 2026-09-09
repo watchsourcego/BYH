@@ -6,6 +6,7 @@ import SiteBottomNav from "../components/SiteBottomNav.astro";
 import SiteLocaleCurrencyFab from "../components/SiteLocaleCurrencyFab.astro";
 import { resolveLocale } from "@/i18n/ui";
 import type { Locale } from "@/i18n/config";
+import { hreflangAlternates, hreflangDefault } from "@/i18n/paths";
 
 interface Props {
   title?: string;
@@ -24,6 +25,8 @@ const {
 
 const locale = resolveLocale(Astro.currentLocale) as Locale;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const alternates = hreflangAlternates(Astro.url.pathname, Astro.site!);
+const xDefaultHref = hreflangDefault(Astro.url.pathname, Astro.site!);
 const pageTitle = title === brand.name ? brand.name : `${title} · ${brand.name}`;
 const ogImageURL = new URL(ogImage, Astro.site);
 const logoSolidURL = new URL(brand.logos.solid, Astro.site);
@@ -86,6 +89,12 @@ const websiteSchema = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    {
+      alternates.map(({ hreflang, href }) => (
+        <link rel="alternate" hreflang={hreflang} href={href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
     <title>{pageTitle}</title>
 
     <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->

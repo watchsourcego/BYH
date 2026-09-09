@@ -5,6 +5,18 @@ export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "en";
 
+/** BCP 47 tags for `<link rel="alternate" hreflang>` and sitemap `xhtml:link`. */
+export const hreflangCodes: Record<Locale, string> = {
+  en: "en",
+  es: "es",
+  pt: "pt",
+  ru: "ru",
+  fr: "fr",
+  de: "de",
+  ar: "ar",
+  id: "id",
+};
+
 export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }
