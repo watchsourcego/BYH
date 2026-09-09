@@ -5,6 +5,10 @@ import { defaultLocale, hreflangCodes } from "./src/i18n/config.ts";
 export default defineConfig({
   site: "https://byhtimepiece.com",
   output: "static",
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: "viewport",
+  },
   integrations: [
     sitemap({
       i18n: {

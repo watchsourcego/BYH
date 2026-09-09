@@ -52,12 +52,15 @@ const whatsappMessage = productWhatsAppMessage({
   data-product-detail
   data-prev-href={prevProduct ? href(`/shop/${prevProduct.slug}/`) : undefined}
   data-next-href={nextProduct ? href(`/shop/${nextProduct.slug}/`) : undefined}
+  data-prev-image={prevProduct ? brandAsset(prevProduct.variants[0].image) : undefined}
+  data-next-image={nextProduct ? brandAsset(nextProduct.variants[0].image) : undefined}
 >
   <div class="product-detail__stage">
     {prevProduct && (
       <a
         class="product-detail__nav product-detail__nav--prev"
         href={href(`/shop/${prevProduct.slug}/`)}
+        data-astro-prefetch="load"
         aria-label={`${t("Product.prev")}: ${prevProduct.title}`}
         title={prevProduct.title}
       >
@@ -82,6 +85,8 @@ const whatsappMessage = productWhatsAppMessage({
         alt={`${product.title} — ${initialVariant.label}`}
         width="800"
         height="800"
+        transition:name="product-hero"
+        fetchpriority="high"
       />
 
       {product.video && (
@@ -101,6 +106,7 @@ const whatsappMessage = productWhatsAppMessage({
       <a
         class="product-detail__nav product-detail__nav--next"
         href={href(`/shop/${nextProduct.slug}/`)}
+        data-astro-prefetch="load"
         aria-label={`${t("Product.next")}: ${nextProduct.title}`}
         title={nextProduct.title}
       >
@@ -222,6 +228,14 @@ const whatsappMessage = productWhatsAppMessage({
 </section>
 
 <script>
+  import { navigate } from "astro:transitions/client";
+
+  function prefetchImage(url: string | undefined) {
+    if (!url) return;
+    const img = new Image();
+    img.src = url;
+  }
+
   function buildProductWhatsAppUrl(btn: HTMLAnchorElement, color: string) {
     const base = btn.dataset.whatsappBase ?? "";
     const title = btn.dataset.productTitle ?? "";
@@ -339,9 +353,11 @@ const whatsappMessage = productWhatsAppMessage({
       const nextHref = root.dataset.nextHref;
 
       if (event.key === "ArrowLeft" && prevHref) {
-        window.location.assign(prevHref);
+        event.preventDefault();
+        void navigate(prevHref);
       } else if (event.key === "ArrowRight" && nextHref) {
-        window.location.assign(nextHref);
+        event.preventDefault();
+        void navigate(nextHref);
       }
     };
 
@@ -355,11 +371,20 @@ const whatsappMessage = productWhatsAppMessage({
     );
   }
 
+  function prefetchAdjacentProducts() {
+    const root = document.querySelector<HTMLElement>("[data-product-detail]");
+    if (!root) return;
+    prefetchImage(root.dataset.prevImage);
+    prefetchImage(root.dataset.nextImage);
+  }
+
   initProductDetail();
   initProductNav();
+  prefetchAdjacentProducts();
   document.addEventListener("astro:page-load", () => {
     initProductDetail();
     initProductNav();
+    prefetchAdjacentProducts();
   });
 </script>
 
