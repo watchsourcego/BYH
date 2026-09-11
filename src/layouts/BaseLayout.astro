@@ -30,6 +30,13 @@ const alternates = hreflangAlternates(Astro.url.pathname, Astro.site!);
 const xDefaultHref = hreflangDefault(Astro.url.pathname, Astro.site!);
 const pageTitle = title === brand.name ? brand.name : `${title} · ${brand.name}`;
 const ogImageURL = new URL(ogImage, Astro.site);
+const ogImageWidth = brand.seo.ogImageWidth;
+const ogImageHeight = brand.seo.ogImageHeight;
+const ogImageType = ogImage.endsWith(".png")
+  ? "image/png"
+  : ogImage.endsWith(".webp")
+    ? "image/webp"
+    : "image/jpeg";
 const logoSolidURL = new URL(brand.logos.solid, Astro.site);
 const htmlDir = locale === "ar" ? "rtl" : "ltr";
 const ogLocale =
@@ -105,13 +112,21 @@ const websiteSchema = {
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:secure_url" content={ogImageURL} />
-    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:type" content={ogImageType} />
+    {
+      ogImageWidth && ogImageHeight ? (
+        <>
+          <meta property="og:image:width" content={String(ogImageWidth)} />
+          <meta property="og:image:height" content={String(ogImageHeight)} />
+        </>
+      ) : null
+    }
     <meta property="og:image:alt" content={`${brand.name} logo`} />
     <meta property="og:site_name" content={brand.name} />
     <meta property="og:locale" content={ogLocale} />
 
     <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />

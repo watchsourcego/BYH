@@ -12,8 +12,10 @@ export const brand = {
       "BYH — Manufacturer of kids LED touch-screen digital watches. Wholesale & OEM from Dongguan, China.",
     homeIntro:
       "Kids LED touch-screen digital watches built for every adventure. Explore our full collection or learn about our factory in Dongguan.",
-    /** White background — Open Graph, WhatsApp, Facebook, favicon, JSON-LD */
-    ogImage: "/logo/BYH-logo.webp",
+    /** 1200×630 JPEG — Facebook/LinkedIn prefer this over WebP for link previews */
+    ogImage: "/logo/og-share.jpg",
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
   },
 
   logos: {
