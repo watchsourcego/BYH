@@ -124,6 +124,11 @@ const websiteSchema = {
     <meta property="og:image:alt" content={`${brand.name} logo`} />
     <meta property="og:site_name" content={brand.name} />
     <meta property="og:locale" content={ogLocale} />
+    {
+      brand.facebookAppId ? (
+        <meta property="fb:app_id" content={brand.facebookAppId} />
+      ) : null
+    }
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />

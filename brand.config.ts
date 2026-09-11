@@ -7,6 +7,11 @@ export const brand = {
   legalName: "BYH Electronic Watch Co., Ltd.",
   tagline: "Youthful watches built for every adventure.",
   siteUrl: "https://byhtimepiece.com",
+  /**
+   * Silences Facebook Sharing Debugger “missing fb:app_id” only — does not change link previews.
+   * Replace with your App ID from Meta for Developers if you create a Facebook app.
+   */
+  facebookAppId: "966242223397117",
   seo: {
     description:
       "BYH — Manufacturer of kids LED touch-screen digital watches. Wholesale & OEM from Dongguan, China.",
